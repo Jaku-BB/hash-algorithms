@@ -1,0 +1,203 @@
+\documentclass{article}
+
+\usepackage[polish]{babel}
+\usepackage[OT4]{fontenc}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=true,
+    breakautoindent=true,
+    linewidth=\linewidth,
+    xleftmargin=0.1\linewidth,
+}
+
+\title{Algorytmy haszujące}
+\author{Jakub Bukała}
+\date{\today}
+
+\begin{document}
+    \maketitle
+
+    \section{Czym są algorytmy haszujące?}
+    \label{section:what-are-hash-algorithms}
+        W dobie cyfrowego świata, gdzie dane osobiste i poufne informacje są przechowywane i przesyłane przez sieć, istnieje potrzeba zapewnienia ich bezpieczeństwa.
+        Jednym z podstawowych narzędzi służących do tego celu są algorytmy haszujące.
+        Ich głównym zadaniem jest przekształcenie danych wejściowych, takich jak hasła, w unikalne ciągi znaków o stałej długości.
+        Powielanie tego procesu dla tych samych danych zawsze zwraca ten sam wynik.
+        \\
+        \\
+        Najważniejszą cechą algorytmów haszujących jest to, że nie da się odwrócić ich działania, czyli znaleźć danych wejściowych na podstawie wyniku działania algorytmu.
+
+    \section{Gdzie są używane algorytmy haszujące?}
+    \label{section:where-are-hash-algorithms-used}
+
+    \begin{itemize}
+        \item Autoryzacja użytkowników w systemach informatycznych.
+        \item Przechowywanie wrażliwych danych, takich jak hasła, w bazach danych.
+        \item Generowanie podpisów cyfrowych, potwierdzających autentyczność dokumentów.
+        \item Zapewnienie integralności danych, na przykład weryfikacja autentyczności pobranego pliku.
+        \item Śledzenie historii zmian w systemach kontroli wersji.
+        \item Generowanie kluczy kryptograficznych.
+        \item Eliminacja duplikatów w zbiorach danych.
+    \end{itemize}
+
+    \clearpage
+
+    \section{Najpopularniejsze algorytmy haszujące}
+    \label{section:most-popular-hash-algorithms}
+
+    \subsection{B-Crypt}
+    \label{subsection:b-crypt}
+        B-Crypt został zaprojektowany z myślą o zastosowaniu w systemach autoryzacji użytkowników, jako bezpieczny sposób przechowywania haseł w bazach danych.
+        \\
+        \\
+        Działa w oparciu o szyfr blokowy \textit{Blowfish} i wykorzystuje sól (losowy ciąg znaków dodawany do hasła), przez co jest odporny na ataki typu \textit{rainbow table}.
+        Jest bardzo elastyczny, co pozwala na dostosowanie jego parametrów do potrzeb aplikacji.
+        Warto dodać, że w większości implementacji dane wejściowe są ograniczone do 72 bajtów.
+        \\
+        \\
+        Jego złożoność czasowa wynosi $O(2^{cost})$, gdzie \textit{cost} to liczba iteracji algorytmu.
+        \\
+        \\
+\begin{lstlisting}[title=Przykładowa implementacja w języku Python, label=lst:b-crypt-example]
+import bcrypt
+
+hashed = bcrypt.hashpw(b'super_tajne', bcrypt.gensalt())
+print(hashed)
+\end{lstlisting}
+
+    \subsection{SHA-256}
+    \label{subsection:sha-256}
+        SHA-256 jest jednym z algorytmów z rodziny \textit{Secure Hash Algorithm}, zaprojektowanym przez \textit{National Security Agency} (NSA).
+        Jest szeroko stosowany w kryptografii, do generowania podpisów cyfrowych, weryfikacji integralności danych oraz w protokołach bezpiecznej komunikacji, takich jak \textit{HTTPS}.
+        Znajduje on również swoje zastosowanie na rynku kryptowalut.
+        \\
+        \\
+        Po użyciu algorytmu na danych wejściowych, otrzymujemy 256-bitowy skrót.
+        Dzięki swojej długości, jest on odporny na ataki typu \textit{brute force} oraz wystąpienie kolizji.
+        \\
+        \\
+        Jego złożoność czasowa wynosi $O(n)$, gdzie \textit{n} to długość danych wejściowych.
+        \\
+        \\
+\begin{lstlisting}[title=Przykładowa implementacja w języku Python, label=lst:sha-256-example]
+import hashlib
+
+hash_sha256 = hashlib.sha256()
+hash_sha256.update(b'super_tajne')
+print(hash_sha256.hexdigest())
+\end{lstlisting}
+
+    \clearpage
+
+    \subsection{MD5}
+    \label{subsection:md5}
+        MD5 jest jednym z najpopularniejszych algorytmów haszujących, zaprojektowanym przez \textit{Ronalda Rivesta} w 1991 roku.
+        Jego zastosowanie jest obecnie ograniczone ze względu na występowanie kolizji, czyli sytuacji, w której dwa różne zestawy danych wejściowych mają ten sam skrót.
+        Mimo to, MD5 jest nadal używany w niektórych systemach, na przykład do weryfikacji integralności plików.
+        \\
+        \\
+        Po użyciu algorytmu na danych wejściowych, otrzymujemy 128-bitowy skrót.
+        \\
+        \\
+        Jego złożoność czasowa wynosi $O(n)$, gdzie \textit{n} to długość danych wejściowych.
+        \\
+        \\
+\begin{lstlisting}[title=Przykładowa implementacja w języku Python, label=lst:md5-example]
+import hashlib
+
+hash_md5 = hashlib.md5()
+hash_md5.update(b"super_tajne")
+print(hash_md5.hexdigest())
+\end{lstlisting}
+
+    \subsection{SHA-1}
+    \label{subsection:sha-1}
+        Kolejnym algorytmem z rodziny \textit{Secure Hash Algorithm} jest SHA-1.
+        Szeroko stosowany w przeszłości (protokoły SSL/TLS, sumy kontrolne), obecnie jest uważany za przestarzały ze względu na występowanie kolizji, podobnie jak MD5.
+        \\
+        \\
+        Po użyciu algorytmu na danych wejściowych, otrzymujemy 160-bitowy skrót.
+        \\
+        \\
+        Jego złożoność czasowa wynosi $O(n)$, gdzie \textit{n} to długość danych wejściowych.
+        \\
+        \\
+\begin{lstlisting}[title=Przykładowa implementacja w języku Python, label=lst:sha-1-example]
+import hashlib
+
+hash_sha1 = hashlib.sha1()
+hash_sha1.update(b'super_tajne')
+print(hash_sha1.hexdigest())
+\end{lstlisting}
+
+    \clearpage
+
+    \subsection{Argon2}
+    \label{subsection:argon2}
+    Zwycięzca konkursu \textit{Password Hashing Competition} - Argon2 - jest jednym z najbezpieczniejszych algorytmów haszujących.
+    Podobnie jak B-Crypt, został zaprojektowany z myślą o zastosowaniu w systemach autoryzacji użytkowników.
+    \\
+    \\
+    Dzięki automatycznemu zastosowaniu soli, sporemu zużyciu pamięci i długiemu czasowi obliczeń jest niezwykle odporny na ataki typu \textit{brute force}, \textit{rainbow table} oraz \textit{side-channel}.
+    \\
+    \\
+    Dostępne są trzy wersje algorytmu:
+    \begin{itemize}
+        \item Argon2d - zaprojektowany do zastosowań, gdzie ataki typu \textit{side-channel} są mało prawdopodobne.
+        Nie jest zalecany do przechowywania haseł ze względu na podatności na ataki czasowe.
+        \item Argon2i - zaprojektowany głównie do przechowywania haseł.
+        \item Argon2id - hybrydowe podejście, łączące zalety obu poprzednich wersji.
+    \end{itemize}
+    Jego złożoność czasowa wynosi $O(m \times t)$, gdzie \textit{m} to zużycie pamięci, a \textit{t} to liczba iteracji algorytmu.
+    \\
+    \\
+    \begin{lstlisting}[title=Przykładowa implementacja w języku Python, label=lst:argon2-example]
+import argon2
+
+hashed = argon2.PasswordHasher().hash("super_tajne")
+print(hashed)
+    \end{lstlisting}
+
+    \clearpage
+
+    \section{Podsumowanie}
+    \label{section:summary}
+        Algorytmy haszujące są niezwykle ważnym narzędziem w dzisiejszym świecie cyfrowym.
+        Zapewniają bezpieczeństwo danych, integralność informacji oraz autentyczność dokumentów.
+        W zależności od zastosowania, warto wybrać odpowiedni algorytm, który spełni wymagania aplikacji pod względem bezpieczeństwa i wydajności.
+        \\
+        \\
+        Należy również pamiętać, aby stosować \textbf{aktualne} i sprawdzone algorytmy, które są odporne na współczesne ataki.
+
+    \section{Referencje}
+    \label{section:references}
+        \begin{enumerate}
+            \item \url{https://en.wikipedia.org/wiki/Hash\_function}
+            \item \url{https://en.wikipedia.org/wiki/Bcrypt}
+            \item \url{https://en.wikipedia.org/wiki/Blowfish_(cipher)}
+            \item \url{https://en.wikipedia.org/wiki/SHA-2}
+            \item \url{https://en.wikipedia.org/wiki/MD5}
+            \item \url{https://en.wikipedia.org/wiki/Argon2}
+            \item \url{https://en.wikipedia.org/wiki/SHA-1}
+            \item \url{https://password-hashing.net}
+            \item \url{https://www.owasp.org/index.php/Password\_Storage\_Cheat\_Sheet}
+            \item \url{https://www.codecademy.com/resources/blog/what-is-hashing}
+        \end{enumerate}
+
+\end{document}
+
+
